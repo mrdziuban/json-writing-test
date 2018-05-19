@@ -26,9 +26,10 @@ object JsonWriting {
    *
    *   { "uuids": "66d23424-4ec1-4775-bc15-ac937339e74f ea5347cc-1204-4222-906e-e1c292dde008 etc..." }
    *
-   * The second element is a JSON string of the UUIDs written to JSON as an array, e.g.
+   * The second element is a JSON object containing one key value pair of
+   * "uuids", <uuids encoded as JSON array>, e.g.
    *
-   *   "[\"66d23424-4ec1-4775-bc15-ac937339e74f\",\"ea5347cc-1204-4222-906e-e1c292dde008\",etc...]"
+   *   { "uuids": "[\"66d23424-4ec1-4775-bc15-ac937339e74f\",\"ea5347cc-1204-4222-906e-e1c292dde008\",etc...]" }
    *
    */
   def generateJson[J](
@@ -38,7 +39,7 @@ object JsonWriting {
       mkArr: Seq[J] => J,
       writeJson: J => String): (J, J) = {
     val plainText = mkObj(Seq("uuids" -> mkString(uuids.mkString(" "))))
-    val jsonText = mkString(writeJson(mkArr(uuids.map(mkString(_)).toSeq)))
+    val jsonText = mkObj(Seq("uuids" -> mkString(writeJson(mkArr(uuids.map(mkString(_)).toSeq)))))
     (plainText, jsonText)
   }
 
